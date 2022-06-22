@@ -32,10 +32,15 @@ export const HomePage = ({ countries, setCountries }) => {
     if (!countries.length) {
       axios.get(ALL_COUNTRIES).then(({ data }) => {
         setCountries(data);
-        setFilteredCountries(data);
       });
     }
-  }, [countries, setCountries]);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    handleSearch();
+    // eslint-disable-next-line
+  }, [countries]);
 
   return (
     <>
