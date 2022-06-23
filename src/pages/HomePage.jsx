@@ -6,17 +6,21 @@ import { Card } from '../components/Card';
 import { Controls } from '../components/Controls';
 import { List } from '../components/List';
 
+import { selectSearch } from '../store/controls/controlsSelectors';
 import { loadCountries } from '../store/countries/countriesActions';
 import {
-  selectCountries,
   selectCountriesInfo,
+  selectVisibleCountries,
 } from '../store/countries/countriesSelectors';
 
 export const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const countries = useSelector(selectCountries);
+  const search = useSelector(selectSearch);
+  const countries = useSelector((state) =>
+    selectVisibleCountries(state, { search })
+  );
   const { status, error, qty } = useSelector(selectCountriesInfo);
 
   const [filteredCountries, setFilteredCountries] = useState(countries);
