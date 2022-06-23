@@ -1,15 +1,24 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { Card } from '../components/Card';
 import { Controls } from '../components/Controls';
 import { List } from '../components/List';
-import { useNavigate } from 'react-router-dom';
 
-import { ALL_COUNTRIES } from '../config';
+import { loadCountries } from '../store/countries/countriesActions';
+import {
+  selectCountries,
+  selectCountriesInfo,
+} from '../store/countries/countriesSelectors';
 
-export const HomePage = ({ countries, setCountries }) => {
+export const HomePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const countries = useSelector(selectCountries);
+  const { status, error, qty } = useSelector(selectCountriesInfo);
+
   const [filteredCountries, setFilteredCountries] = useState(countries);
 
   const handleSearch = (search, region) => {
@@ -29,13 +38,10 @@ export const HomePage = ({ countries, setCountries }) => {
   };
 
   useEffect(() => {
-    if (!countries.length) {
-      axios.get(ALL_COUNTRIES).then(({ data }) => {
-        setCountries(data);
-      });
+    if (!qty) {
+      dispatch(loadCountries());
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [dispatch, qty]);
 
   useEffect(() => {
     handleSearch();
@@ -45,36 +51,41 @@ export const HomePage = ({ countries, setCountries }) => {
   return (
     <>
       <Controls onSearch={handleSearch} />
-      <List>
-        {filteredCountries.map((country) => {
-          const countryInfo = {
-            img: country.flags.png,
-            name: country.name.common,
-            info: [
-              {
-                title: 'Population',
-                description: country.population.toLocaleString(),
-              },
-              {
-                title: 'Region',
-                description: country.region,
-              },
-              {
-                title: 'Capital',
-                description: country.capital[0],
-              },
-            ],
-          };
+      {error && <h2>Can't fetch data</h2>}
+      {status === 'loading' && <h2>Loading...</h2>}
 
-          return (
-            <Card
-              key={countryInfo.name}
-              onClick={() => navigate(`/country/${countryInfo.name}`)}
-              {...countryInfo}
-            />
-          );
-        })}
-      </List>
+      {status === 'received' && (
+        <List>
+          {filteredCountries.map((country) => {
+            const countryInfo = {
+              img: country.flags.png,
+              name: country.name.common,
+              info: [
+                {
+                  title: 'Population',
+                  description: country.population.toLocaleString(),
+                },
+                {
+                  title: 'Region',
+                  description: country.region,
+                },
+                {
+                  title: 'Capital',
+                  description: country.capital[0],
+                },
+              ],
+            };
+
+            return (
+              <Card
+                key={countryInfo.name}
+                onClick={() => navigate(`/country/${countryInfo.name}`)}
+                {...countryInfo}
+              />
+            );
+          })}
+        </List>
+      )}
     </>
   );
 };
