@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,44 +23,21 @@ export const HomePage = () => {
   );
   const { status, error, qty } = useSelector(selectCountriesInfo);
 
-  const [filteredCountries, setFilteredCountries] = useState(countries);
-
-  const handleSearch = (search, region) => {
-    let data = [...countries];
-
-    if (region) {
-      data = data.filter((country) => country.region.includes(region));
-    }
-
-    if (search) {
-      data = data.filter((country) =>
-        country.name.common.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    setFilteredCountries(data);
-  };
-
   useEffect(() => {
     if (!qty) {
       dispatch(loadCountries());
     }
   }, [dispatch, qty]);
 
-  useEffect(() => {
-    handleSearch();
-    // eslint-disable-next-line
-  }, [countries]);
-
   return (
     <>
-      <Controls onSearch={handleSearch} />
+      <Controls />
       {error && <h2>Can't fetch data</h2>}
       {status === 'loading' && <h2>Loading...</h2>}
 
       {status === 'received' && (
         <List>
-          {filteredCountries.map((country) => {
+          {countries.map((country) => {
             const countryInfo = {
               img: country.flags.png,
               name: country.name.common,
