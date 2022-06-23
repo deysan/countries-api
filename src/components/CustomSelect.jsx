@@ -25,6 +25,7 @@ export const CustomSelect = styled(Select).attrs({
 })`
   width: 200px;
   font-family: var(--family);
+  font-size: var(--fs-sm);
   border-radius: var(--radii);
   border: none;
 

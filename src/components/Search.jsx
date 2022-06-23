@@ -7,10 +7,11 @@ const InputContainer = styled.label`
   align-items: center;
   width: 100%;
   margin-bottom: 1.5rem;
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   background-color: var(--colors-ui-base);
   border-radius: var(--radii);
   box-shadow: var(--shadow);
+  overflow: hidden;
 
   @media (min-width: 767px) {
     width: 280px;
@@ -22,7 +23,7 @@ const Input = styled.input.attrs({
   type: 'search',
   placeholder: 'Search for a country...',
 })`
-  margin-left: 2rem;
+  margin-left: 1rem;
   color: var(--color-text);
   background-color: transparent;
   border: none;
@@ -32,7 +33,7 @@ const Input = styled.input.attrs({
 export const Search = ({ search, setSearch }) => {
   return (
     <InputContainer>
-      <IoSearch />
+      <IoSearch size="16px" color="#7d7f81" />
       <Input onChange={(e) => setSearch(e.target.value)} value={search} />
     </InputContainer>
   );
