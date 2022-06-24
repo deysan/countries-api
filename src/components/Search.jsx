@@ -15,6 +15,7 @@ const InputContainer = styled.label`
   border-radius: var(--radii);
   box-shadow: var(--shadow);
   overflow: hidden;
+  transition: all cubic-bezier(0.55, 0.085, 0.68, 0.53) 150ms;
 
   @media (min-width: 767px) {
     width: 280px;

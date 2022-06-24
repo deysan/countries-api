@@ -12,6 +12,7 @@ export const CustomSelect = styled(Select).attrs({
       borderRadius: 'var(--radii)',
       border: 'none',
       boxShadow: 'var(--shadow)',
+      transition: 'all cubic-bezier(0.55, 0.085, 0.68, 0.53) 150ms',
     }),
     option: (provided, state) => ({
       ...provided,

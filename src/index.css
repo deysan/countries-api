@@ -40,4 +40,5 @@ body {
   color: var(--colors-text);
   font-weight: var(--fw-light);
   background-color: var(--colors-bg);
+  transition: all cubic-bezier(0.55, 0.085, 0.68, 0.53) 150ms;
 }
