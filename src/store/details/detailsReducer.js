@@ -1,5 +1,6 @@
 import {
   SET_COUNTRY,
+  SET_NEIGHBORS,
   SET_ERROR,
   SET_LOADING,
   CLEAR_DETAILS,
@@ -9,6 +10,7 @@ const initialState = {
   status: 'idle', // loading | received | rejected
   error: null,
   country: null,
+  neighbors: [],
 };
 
 export const detailsReducer = (state = initialState, { type, payload }) => {
@@ -18,6 +20,11 @@ export const detailsReducer = (state = initialState, { type, payload }) => {
         ...state,
         status: 'received',
         country: payload,
+      };
+    case SET_NEIGHBORS:
+      return {
+        ...state,
+        neighbors: payload,
       };
     case SET_LOADING:
       return {

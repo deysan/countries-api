@@ -8,7 +8,7 @@ import { Info } from '../components/Info';
 
 import {
   clearDetails,
-  loadCurrentCountry,
+  loadCurrentCountryByName,
 } from '../store/details/detailsActions';
 import { selectDetails } from '../store/details/detailsSelectors';
 
@@ -19,7 +19,7 @@ export const Details = () => {
   const { country, status, error } = useSelector(selectDetails);
 
   useEffect(() => {
-    dispatch(loadCurrentCountry(name));
+    dispatch(loadCurrentCountryByName(name));
 
     return () => {
       dispatch(clearDetails());

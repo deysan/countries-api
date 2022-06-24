@@ -1,7 +1,9 @@
-import axios from 'axios';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import { filterByCode } from '../config';
+
+import { loadNeighborsByBorder } from '../store/details/detailsActions';
+import { selectNeighbors } from '../store/details/detailsSelectors';
 
 const Wrapper = styled.section`
   display: grid;
@@ -104,16 +106,14 @@ export const Info = (props) => {
     push,
   } = props;
 
-  const [neighbors, setNeighbors] = useState([]);
+  const dispatch = useDispatch();
+  const neighbors = useSelector(selectNeighbors);
 
   useEffect(() => {
     if (borders.length) {
-      axios
-        .get(filterByCode(borders))
-        .then(({ data }) => data.map((country) => country.name.common))
-        .then((countries) => setNeighbors(countries));
+      dispatch(loadNeighborsByBorder(borders));
     }
-  }, [borders]);
+  }, [borders, dispatch]);
 
   return (
     <Wrapper>
@@ -159,9 +159,12 @@ export const Info = (props) => {
             <span>There is no border countries</span>
           ) : (
             <TagGroup>
-              {neighbors.map((border) => (
-                <Tag key={border} onClick={() => push(`/country/${border}`)}>
-                  {border}
+              {neighbors.map((countryName) => (
+                <Tag
+                  key={countryName.official}
+                  onClick={() => push(`/country/${countryName.official}`)}
+                >
+                  {countryName.common}
                 </Tag>
               ))}
             </TagGroup>
