@@ -40,7 +40,7 @@ export const HomePage = () => {
           {countries.map((country) => {
             const countryInfo = {
               img: country.flags.png,
-              name: country.name.common,
+              name: country.name.official,
               info: [
                 {
                   title: 'Population',

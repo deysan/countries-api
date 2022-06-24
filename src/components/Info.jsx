@@ -140,7 +140,7 @@ export const Info = (props) => {
           </List>
           <List>
             <ListItem>
-              <b>Top Level Domain:</b> {tld.join(', ')}
+              <b>Top Level Domain:</b> {tld?.join(', ')}
             </ListItem>
             <ListItem>
               <b>Currency:</b>{' '}
