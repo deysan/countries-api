@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { IoArrowBack } from 'react-icons/io5';
@@ -7,7 +6,10 @@ import { IoArrowBack } from 'react-icons/io5';
 import { Button } from '../components/Button';
 import { Info } from '../components/Info';
 
-import { loadCurrentCountry } from '../store/details/detailsActions';
+import {
+  clearDetails,
+  loadCurrentCountry,
+} from '../store/details/detailsActions';
 import { selectDetails } from '../store/details/detailsSelectors';
 
 export const Details = () => {
@@ -18,6 +20,10 @@ export const Details = () => {
 
   useEffect(() => {
     dispatch(loadCurrentCountry(name));
+
+    return () => {
+      dispatch(clearDetails());
+    };
   }, [dispatch, name]);
 
   return (
