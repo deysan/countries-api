@@ -1,80 +1,72 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import { Card } from '../components/Card';
 import { Controls } from '../components/Controls';
 import { List } from '../components/List';
-import { useNavigate } from 'react-router-dom';
 
-import { ALL_COUNTRIES } from '../config';
+import { selectControls } from '../store/controls/controlsSelectors';
+import { loadCountries } from '../store/countries/countriesActions';
+import {
+  selectCountriesInfo,
+  selectVisibleCountries,
+} from '../store/countries/countriesSelectors';
 
-export const HomePage = ({ countries, setCountries }) => {
+export const HomePage = () => {
   const navigate = useNavigate();
-  const [filteredCountries, setFilteredCountries] = useState(countries);
+  const dispatch = useDispatch();
 
-  const handleSearch = (search, region) => {
-    let data = [...countries];
-
-    if (region) {
-      data = data.filter((country) => country.region.includes(region));
-    }
-
-    if (search) {
-      data = data.filter((country) =>
-        country.name.common.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    setFilteredCountries(data);
-  };
+  const controls = useSelector(selectControls);
+  const countries = useSelector((state) =>
+    selectVisibleCountries(state, controls)
+  );
+  const { status, error, qty } = useSelector(selectCountriesInfo);
 
   useEffect(() => {
-    if (!countries.length) {
-      axios.get(ALL_COUNTRIES).then(({ data }) => {
-        setCountries(data);
-      });
+    if (!qty) {
+      dispatch(loadCountries());
     }
-    // eslint-disable-next-line
-  }, []);
-
-  useEffect(() => {
-    handleSearch();
-    // eslint-disable-next-line
-  }, [countries]);
+  }, [dispatch, qty]);
 
   return (
     <>
-      <Controls onSearch={handleSearch} />
-      <List>
-        {filteredCountries.map((country) => {
-          const countryInfo = {
-            img: country.flags.png,
-            name: country.name.common,
-            info: [
-              {
-                title: 'Population',
-                description: country.population.toLocaleString(),
-              },
-              {
-                title: 'Region',
-                description: country.region,
-              },
-              {
-                title: 'Capital',
-                description: country.capital[0],
-              },
-            ],
-          };
+      <Controls />
+      {error && <h2>Can't fetch data</h2>}
+      {status === 'loading' && <h2>Loading...</h2>}
 
-          return (
-            <Card
-              key={countryInfo.name}
-              onClick={() => navigate(`/country/${countryInfo.name}`)}
-              {...countryInfo}
-            />
-          );
-        })}
-      </List>
+      {status === 'received' && (
+        <List>
+          {countries.map((country) => {
+            const countryInfo = {
+              img: country.flags.png,
+              name: country.name.official,
+              info: [
+                {
+                  title: 'Population',
+                  description: country.population.toLocaleString(),
+                },
+                {
+                  title: 'Region',
+                  description: country.region,
+                },
+                {
+                  title: 'Capital',
+                  description: country.capital[0],
+                },
+              ],
+            };
+
+            return (
+              <Card
+                key={countryInfo.name}
+                onClick={() => navigate(`/country/${countryInfo.name}`)}
+                {...countryInfo}
+              />
+            );
+          })}
+        </List>
+      )}
     </>
   );
 };
