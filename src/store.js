@@ -10,7 +10,7 @@ import { controlsReducer } from './features/controls/controls-slice';
 import { countriesReducer } from './features/countries/countries-slice';
 import { detailsReducer } from './features/details/details-slice';
 
-const rootReducer = combineReducers({
+const reducers = combineReducers({
   theme: themeReducer,
   countries: countriesReducer,
   controls: controlsReducer,
@@ -23,7 +23,7 @@ const persistConfig = {
   whitelist: ['theme', 'countries'],
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
   reducer: persistedReducer,
