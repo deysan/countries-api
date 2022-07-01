@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { Card } from '../components/Card';
-import { Controls } from '../components/Controls';
 import { List } from '../components/List';
+import { Controls } from '../features/controls/Controls';
 
 import { selectControls } from '../store/controls/controlsSelectors';
 import { loadCountries } from '../store/countries/countriesActions';

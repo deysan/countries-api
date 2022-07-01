@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Container } from './Container';
-import { clearControls } from '../store/controls/controlsActions';
-import { ThemeSwitcher } from '../store/features/theme/ThemeSwitcher';
+import { ThemeSwitcher } from '../features/theme/ThemeSwitcher';
+import { useCleanUp } from '../features/controls/use-cleanup';
 
 const HeaderEl = styled.header`
   background-color: (--color-ui-base);
@@ -28,9 +27,7 @@ const Title = styled(Link).attrs({
 `;
 
 export const Header = () => {
-  const dispatch = useDispatch();
-
-  const cleanUp = () => dispatch(clearControls());
+  const cleanUp = useCleanUp();
 
   return (
     <HeaderEl>

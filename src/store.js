@@ -5,9 +5,9 @@ import storage from 'redux-persist/lib/storage';
 
 import * as api from './config';
 
-import { themeReducer } from './store/features/theme/theme-slice';
+import { themeReducer } from './features/theme/theme-slice';
+import { controlsReducer } from './features/controls/controls-slice';
 import { countriesReducer } from './store/countries/countriesReducer';
-import { controlsReducer } from './store/controls/controlsReducer';
 import { detailsReducer } from './store/details/detailsReducer';
 
 const rootReducer = combineReducers({
